@@ -28,6 +28,7 @@ class ListFragment : Fragment() {
         Log.d("DEBUG_RV", "Hi Fragment")
         _binding = FragmentListBinding.inflate(inflater, container, false)
         viewModel = ListFragmentViewModel(_binding)
+        _binding?.viewModel = viewModel
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->

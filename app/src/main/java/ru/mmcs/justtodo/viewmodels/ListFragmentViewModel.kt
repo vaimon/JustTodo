@@ -1,6 +1,8 @@
 package ru.mmcs.justtodo.viewmodels
 
 import android.util.Log
+import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,10 +15,8 @@ import ru.mmcs.justtodo.models.Task
 
 class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
     private val listItems = mutableListOf<Task>()
-    val taskCount
-        get() = listItems.size.toString()
-    val completedCount
-        get() = listItems.filter { t -> t.isDone }.size.toString()
+    val taskCount = ObservableField("0")
+    val completedCount = ObservableField("0")
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
@@ -25,12 +25,13 @@ class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
         override fun onBtnRemoveClicked(item: Task, position: Int) {
             listItems.removeAt(position)
             rvAdapter.notifyItemRemoved(position)
-
+            taskCount.set(listItems.size.toString())
         }
 
         override fun onItemSelected(item: Task, position: Int) {
             listItems.set(position, item.apply { isDone = !isDone })
             rvAdapter.notifyItemChanged(position)
+            completedCount.set(listItems.filter { t -> t.isDone }.size.toString())
         }
     }
 
@@ -62,6 +63,7 @@ class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
             return
         listItems.add(task)
         rvAdapter.notifyItemInserted(listItems.size - 1)
+        taskCount.set(listItems.size.toString())
     }
 
     data class UiState(val isDialogShowing: Boolean = false)
