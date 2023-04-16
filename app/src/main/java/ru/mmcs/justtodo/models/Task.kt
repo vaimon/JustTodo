@@ -10,4 +10,8 @@ class Task(var title: String,
     @PrimaryKey
     var _id: ObjectId = ObjectId()
     constructor() : this("","",false)
+
+    override fun toString(): String {
+        return "$title: $description ($isDone)"
+    }
 }

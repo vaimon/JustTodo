@@ -19,12 +19,28 @@
             android:layout_height="wrap_content"
             android:ellipsize="start"
             android:hint="@string/what_todo"
+            android:inputType="textCapSentences"
             android:maxLines="1"
             android:text="@{viewModel.title}"
-            app:layout_constraintEnd_toStartOf="@+id/btnOk"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <EditText
+            android:id="@+id/etFullDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:hint="@string/details"
+            android:lines="4"
+            android:minLines="4"
+            android:maxLines="4"
+            android:gravity="top|start"
+            android:scrollbars="vertical"
+            android:scrollHorizontally="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etDescription" />
         <Button
             android:id="@+id/btnOk"
             android:layout_width="wrap_content"
@@ -33,21 +49,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etFullDescription" />
-
-        <EditText
-            android:id="@+id/etFullDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/details"
-            android:lines="4"
-            android:minLines="4"
-            android:maxLines="4"
-            android:gravity="top|start"
-            android:scrollbars="vertical"
-            android:text="@{viewModel.description}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

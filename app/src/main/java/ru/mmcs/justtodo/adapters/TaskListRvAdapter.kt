@@ -35,7 +35,7 @@ class TaskListRvAdapter(
             paintFlags = if (item.isDone) paintFlags or Paint.STRIKE_THRU_TEXT_FLAG else paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
 
-        holder.binding.cbDone.setOnCheckedChangeListener { compoundButton, b ->
+        holder.binding.cbDone.setOnClickListener {
             onItemInteractionListener?.onItemSelected(item, position)
         }
 

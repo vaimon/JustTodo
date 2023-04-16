@@ -1,5 +1,6 @@
 package ru.mmcs.justtodo.viewmodels
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -54,6 +55,7 @@ class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
         }
 
         taskList.observeForever {
+            Log.d("DEBUG_INFO",it.firstOrNull().toString())
             taskCount.set(it.size.toString())
             completedCount.set(it.filter { t -> t.isDone }.size.toString())
         }

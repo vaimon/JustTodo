@@ -27,14 +27,12 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("DEBUG_RV", "Create Fragment")
         _binding = FragmentListBinding.inflate(inflater, container, false)
         viewModel = ListFragmentViewModel(_binding)
         _binding?.viewModel = viewModel
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
-                    Log.d("DEBUG_RV","Event updated")
                     if(uiState.isDialogShowing){
                         viewModel.onDialogOpened()
                         NewItemFragment(object : NewItemFragment.DialogInteraction {
@@ -48,8 +46,10 @@ class ListFragment : Fragment() {
                         }).show(childFragmentManager, NewItemFragment.TAG)
                     }
                     if(uiState.navigationTarget != null){
+                        val args = Bundle()
+                        args.putString("task_id", uiState.navigationTarget.toHexString())
+                        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment, args)
                         viewModel.onDetailsFragmentOpened()
-                        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
                     }
                 }
             }

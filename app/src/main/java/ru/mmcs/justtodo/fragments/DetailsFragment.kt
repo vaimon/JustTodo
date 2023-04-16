@@ -26,7 +26,8 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        viewModel = DetailsFragmentViewModel(_binding, Task("Example","", true))
+        _binding?.lifecycleOwner = this
+        viewModel = DetailsFragmentViewModel(_binding, arguments?.getString("task_id") ?: "")
         _binding?.viewModel = viewModel
         return binding.root
     }

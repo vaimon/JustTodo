@@ -35,6 +35,7 @@ class TaskListRepository(private val viewModel: ListFragmentViewModel) {
                             }
                     }
                     is InitialResults ->{
+                        viewModel.taskList.postValue(changes.list)
                         viewModel.dataStatus.postValue(ListFragmentViewModel.DataStatus.Received to -1)
                     }
                     else -> {
@@ -48,7 +49,7 @@ class TaskListRepository(private val viewModel: ListFragmentViewModel) {
     suspend fun toggleTaskStatus(taskId: ObjectId, isDone: Boolean){
         realm.write {
             val task: Task? =
-                this.query(Task::class,"_id == ${taskId}").first().find()
+                this.query(Task::class,"_id == oid(${taskId.toHexString()})").first().find()
             task?.isDone = isDone
         }
     }
@@ -58,12 +59,12 @@ class TaskListRepository(private val viewModel: ListFragmentViewModel) {
     }
 
     fun getTask(id: ObjectId) : Task?{
-        return realm.query(Task::class, "_id == ${id.toHexString()}").first().find()
+        return realm.query(Task::class, "_id == oid(${id.toHexString()})").first().find()
     }
 
     suspend fun deleteTask(task: Task){
         realm.write {
-            val writeTransactionItems = query(Task::class, "_id == ${task._id.toHexString()}").find()
+            val writeTransactionItems = query(Task::class, "_id == oid(${task._id.toHexString()})").find()
             delete(writeTransactionItems.first())
         }
     }

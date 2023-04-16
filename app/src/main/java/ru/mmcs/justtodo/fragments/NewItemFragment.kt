@@ -1,21 +1,16 @@
 package ru.mmcs.justtodo.fragments
 
-import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import ru.mmcs.justtodo.R
-import ru.mmcs.justtodo.databinding.FragmentListBinding
 import ru.mmcs.justtodo.databinding.FragmentNewItemBinding
 import ru.mmcs.justtodo.models.Task
-import ru.mmcs.justtodo.viewmodels.ListFragmentViewModel
 import ru.mmcs.justtodo.viewmodels.NewItemFragmentViewModel
 
 class NewItemFragment(private val dialogInteraction: DialogInteraction) : DialogFragment() {
@@ -28,6 +23,7 @@ class NewItemFragment(private val dialogInteraction: DialogInteraction) : Dialog
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentNewItemBinding.inflate(inflater, container, false)
+        _binding?.lifecycleOwner = this
         viewModel = NewItemFragmentViewModel(_binding, dialogInteraction)
         _binding?.btnOk?.setOnClickListener {
             viewModel.onBtnOkClick()
@@ -39,7 +35,21 @@ class NewItemFragment(private val dialogInteraction: DialogInteraction) : Dialog
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.onTextChanged(p0.toString())
+                viewModel.onTitleChanged(p0.toString())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+        _binding?.etFullDescription?.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.onDescriptionChanged(p0.toString())
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -53,6 +63,11 @@ class NewItemFragment(private val dialogInteraction: DialogInteraction) : Dialog
     override fun onDismiss(dialog: DialogInterface) {
         viewModel.onDismiss()
         super.onDismiss(dialog)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     override fun onDestroyView() {
