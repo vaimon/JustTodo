@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import ru.mmcs.justtodo.databinding.ItemTaskBinding
@@ -13,7 +14,7 @@ import ru.mmcs.justtodo.models.Task
 
 
 class TaskListRvAdapter(
-    var items: MutableList<Task>,
+    var items: LiveData<List<Task>>,
     private val onItemInteractionListener: OnItemInteractionListener? = null
 ) : RecyclerView.Adapter<TaskListRvAdapter.ViewHolder>() {
 
@@ -28,8 +29,7 @@ class TaskListRvAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items.get(position)
-        Log.d("DEBUG_RV", "Bind: ${item}")
+        val item = items.value!!.get(position)
         holder.binding.task = item
         holder.binding.tvTask.apply {
             paintFlags = if (item.isDone) paintFlags or Paint.STRIKE_THRU_TEXT_FLAG else paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
@@ -48,7 +48,7 @@ class TaskListRvAdapter(
         }
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = items.value!!.size
 
     inner class ViewHolder(val binding: ItemTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
