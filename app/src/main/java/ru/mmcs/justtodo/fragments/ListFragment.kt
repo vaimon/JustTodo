@@ -25,7 +25,6 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("DEBUG_RV", "Hi Fragment")
         _binding = FragmentListBinding.inflate(inflater, container, false)
         viewModel = ListFragmentViewModel(_binding)
         _binding?.viewModel = viewModel

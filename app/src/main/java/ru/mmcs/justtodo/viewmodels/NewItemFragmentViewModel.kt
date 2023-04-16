@@ -9,19 +9,20 @@ import ru.mmcs.justtodo.models.Task
 class NewItemFragmentViewModel(var binding: FragmentNewItemBinding?,
                                val dialogInteraction: NewItemFragment.DialogInteraction
 ) : ViewModel() {
+    val title = MutableLiveData<String>()
     val description = MutableLiveData<String>()
 
     fun onBtnOkClick(){
-        val desc = description.value
-        if(desc != null){
-            dialogInteraction.onTaskCreated(Task(desc, false))
+        val titleInput = title.value
+        if(titleInput != null){
+            dialogInteraction.onTaskCreated(Task(titleInput, description.value ?: "",false))
         }else{
             onDismiss()
         }
     }
 
     fun onTextChanged(text: String){
-        description.value = text
+        title.value = text
     }
 
     fun onDismiss(){

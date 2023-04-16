@@ -23,9 +23,11 @@ class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
 
     val rvListeners = object : TaskListRvAdapter.OnItemInteractionListener {
         override fun onBtnRemoveClicked(item: Task, position: Int) {
+            Log.d("DEBUG_RV", "Remove:${position}")
             listItems.removeAt(position)
             rvAdapter.notifyItemRemoved(position)
-            taskCount.set(listItems.size.toString())
+            rvAdapter.notifyItemRangeChanged(position,rvAdapter.getItemCount());
+            taskCount.set(rvAdapter.itemCount.toString())
         }
 
         override fun onItemSelected(item: Task, position: Int) {
@@ -63,7 +65,7 @@ class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
             return
         listItems.add(task)
         rvAdapter.notifyItemInserted(listItems.size - 1)
-        taskCount.set(listItems.size.toString())
+        taskCount.set(rvAdapter.itemCount.toString())
     }
 
     data class UiState(val isDialogShowing: Boolean = false)
