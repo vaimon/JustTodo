@@ -1,19 +1,18 @@
 package ru.mmcs.justtodo.viewmodels
 
-import android.util.Log
 import androidx.databinding.ObservableField
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import ru.mmcs.justtodo.Utils.notifyObserver
+import org.mongodb.kbson.ObjectId
 import ru.mmcs.justtodo.adapters.TaskListRvAdapter
 import ru.mmcs.justtodo.databinding.FragmentListBinding
 import ru.mmcs.justtodo.models.Task
+import ru.mmcs.justtodo.repositories.TaskListRepository
 
 class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
+    private val repository = TaskListRepository(this)
     private val listItems = mutableListOf<Task>()
     val taskCount = ObservableField("0")
     val completedCount = ObservableField("0")
@@ -23,7 +22,6 @@ class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
 
     val rvListeners = object : TaskListRvAdapter.OnItemInteractionListener {
         override fun onBtnRemoveClicked(item: Task, position: Int) {
-            Log.d("DEBUG_RV", "Remove:${position}")
             listItems.removeAt(position)
             rvAdapter.notifyItemRemoved(position)
             rvAdapter.notifyItemRangeChanged(position,rvAdapter.getItemCount());
@@ -61,7 +59,7 @@ class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
 
     fun onListItemClicked(task: Task?){
         _uiState.update { currentUiState ->
-            currentUiState.copy(navigationTarget = task?.title)
+            currentUiState.copy(navigationTarget = task?._id)
         }
     }
 
@@ -85,5 +83,5 @@ class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
         }
     }
 
-    data class UiState(val isDialogShowing: Boolean = false, val navigationTarget: String? = null)
+    data class UiState(val isDialogShowing: Boolean = false, val navigationTarget: ObjectId? = null)
 }
