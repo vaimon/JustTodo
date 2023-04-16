@@ -7,14 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import ru.mmcs.justtodo.R
-import ru.mmcs.justtodo.databinding.FragmentEditBinding
-import ru.mmcs.justtodo.viewmodels.ListFragmentViewModel
+import ru.mmcs.justtodo.databinding.FragmentDetailsBinding
+import ru.mmcs.justtodo.models.Task
+import ru.mmcs.justtodo.viewmodels.DetailsFragmentViewModel
 
-class EditFragment : Fragment() {
+class DetailsFragment : Fragment() {
 
-    private var _binding: FragmentEditBinding? = null
+    private var _binding: FragmentDetailsBinding? = null
 
-
+    public lateinit var viewModel: DetailsFragmentViewModel
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -23,23 +24,15 @@ class EditFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        _binding = FragmentEditBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        viewModel = DetailsFragmentViewModel(_binding, Task("Example","", true))
+        _binding?.viewModel = viewModel
         return binding.root
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        viewModel.binding = null
     }
 }

@@ -10,7 +10,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
+import ru.mmcs.justtodo.R
 import ru.mmcs.justtodo.databinding.FragmentListBinding
 import ru.mmcs.justtodo.models.Task
 import ru.mmcs.justtodo.viewmodels.ListFragmentViewModel
@@ -25,13 +27,16 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d("DEBUG_RV", "Create Fragment")
         _binding = FragmentListBinding.inflate(inflater, container, false)
         viewModel = ListFragmentViewModel(_binding)
         _binding?.viewModel = viewModel
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
+                    Log.d("DEBUG_RV","Event updated")
                     if(uiState.isDialogShowing){
+                        viewModel.onDialogOpened()
                         NewItemFragment(object : NewItemFragment.DialogInteraction {
                             override fun onTaskCreated(task: Task) {
                                 viewModel.onDialogShown(task)
@@ -41,6 +46,10 @@ class ListFragment : Fragment() {
                                 viewModel.onDialogShown()
                             }
                         }).show(childFragmentManager, NewItemFragment.TAG)
+                    }
+                    if(uiState.navigationTarget != null){
+                        viewModel.onDetailsFragmentOpened()
+                        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
                     }
                 }
             }

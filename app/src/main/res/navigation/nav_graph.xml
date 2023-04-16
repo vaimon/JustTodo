@@ -17,9 +17,9 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="ru.mmcs.justtodo.fragments.EditFragment"
+        android:name="ru.mmcs.justtodo.fragments.DetailsFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_edit">
+        tools:layout="@layout/fragment_details">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"

@@ -35,6 +35,10 @@ class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
             rvAdapter.notifyItemChanged(position)
             completedCount.set(listItems.filter { t -> t.isDone }.size.toString())
         }
+
+        override fun onItemClicked(item: Task) {
+            onListItemClicked(item)
+        }
     }
 
     private val rvAdapter: TaskListRvAdapter = TaskListRvAdapter(listItems, rvListeners)
@@ -50,17 +54,18 @@ class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
     }
 
     fun onBtnAddClick() {
-        Log.d("DEBUG_RV", "State start: ${_uiState.value.isDialogShowing}")
         _uiState.update { currentUiState ->
             currentUiState.copy(isDialogShowing = true)
         }
     }
 
-    fun onDialogShown(task: Task? = null) {
+    fun onListItemClicked(task: Task?){
         _uiState.update { currentUiState ->
-            currentUiState.copy(isDialogShowing = false)
+            currentUiState.copy(navigationTarget = task?.title)
         }
-        Log.d("DEBUG_RV", "State end: ${_uiState.value.isDialogShowing}")
+    }
+
+    fun onDialogShown(task: Task? = null) {
         if (task == null)
             return
         listItems.add(task)
@@ -68,5 +73,17 @@ class ListFragmentViewModel(var binding: FragmentListBinding?) : ViewModel() {
         taskCount.set(rvAdapter.itemCount.toString())
     }
 
-    data class UiState(val isDialogShowing: Boolean = false)
+    fun onDialogOpened() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(isDialogShowing = false)
+        }
+    }
+
+    fun onDetailsFragmentOpened(){
+        _uiState.update { currentUiState ->
+            currentUiState.copy(navigationTarget = null)
+        }
+    }
+
+    data class UiState(val isDialogShowing: Boolean = false, val navigationTarget: String? = null)
 }

@@ -12,4 +12,6 @@
     <string name="add_button">Add button</string>
     <string name="what_todo">Что нужно сделать?</string>
     <string name="details">Подробности...</string>
+    <string name="task">Задача</string>
+    <string name="description">Описание</string>
 </resources>

@@ -42,6 +42,10 @@ class TaskListRvAdapter(
         holder.binding.btnDelete.setOnClickListener {
             onItemInteractionListener?.onBtnRemoveClicked(item, position)
         }
+
+        holder.binding.root.setOnClickListener {
+            onItemInteractionListener?.onItemClicked(item)
+        }
     }
 
     override fun getItemCount(): Int = items.size
@@ -53,6 +57,7 @@ class TaskListRvAdapter(
     interface OnItemInteractionListener {
         fun onBtnRemoveClicked(item: Task, position: Int)
         fun onItemSelected(item: Task, position: Int)
+        fun onItemClicked(item: Task)
     }
 
 }
